@@ -16,8 +16,8 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.logging.LoggingFeatureAutoDiscoverable;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.Whitebox;
@@ -135,7 +135,7 @@ public class SessionStorageTest extends PowerMockTestCase {
         verify(targetMock, times(1)).register(isA(JacksonJsonProvider.class));
         verify(targetMock).register(MultiPartWriter.class);
         verify(configurationMock).getLogHttp();
-        verify(targetMock, never()).register(LoggingFilter.class);
+        verify(targetMock, never()).register(LoggingFeatureAutoDiscoverable.class);
     }
 
     @Test
@@ -155,7 +155,7 @@ public class SessionStorageTest extends PowerMockTestCase {
         doReturn(targetMock).when(targetMock).register(MultiPartWriter.class);
         doReturn(targetMock).when(targetMock).register(any(JacksonJsonProvider.class));
         doReturn(true).when(configurationMock).getLogHttp();
-        doReturn(targetMock).when(targetMock).register(any(LoggingFilter.class));
+        doReturn(targetMock).when(targetMock).register(any(LoggingFeatureAutoDiscoverable.class));
 
         // When
         SessionStorage sessionStorage = new SessionStorage(configurationMock, credentialsMock, null, null);
@@ -174,7 +174,7 @@ public class SessionStorageTest extends PowerMockTestCase {
         verify(targetMock, times(1)).register(isA(JacksonJsonProvider.class));
         verify(targetMock).register(MultiPartWriter.class);
         verify(configurationMock).getLogHttp();
-        verify(targetMock).register(isA(LoggingFilter.class));
+        verify(targetMock).register(isA(LoggingFeatureAutoDiscoverable.class));
     }
 
     @Test
@@ -210,7 +210,7 @@ public class SessionStorageTest extends PowerMockTestCase {
         doReturn(targetMock).when(targetMock).register(any(JacksonJsonProvider.class));
         doReturn(targetMock).when(targetMock).register(any(SessionOutputFilter.class));
         doReturn(true).when(configurationMock).getLogHttp();
-        doReturn(targetMock).when(targetMock).register(any(LoggingFilter.class));
+        doReturn(targetMock).when(targetMock).register(any(LoggingFeatureAutoDiscoverable.class));
         when(sessionStorage.getConfiguredClient()).thenReturn(targetMock);
 
         // When

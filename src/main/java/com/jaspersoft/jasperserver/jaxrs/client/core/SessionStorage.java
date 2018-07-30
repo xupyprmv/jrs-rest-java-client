@@ -34,10 +34,12 @@ import javax.net.ssl.SSLSession;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.FeatureContext;
+
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.filter.LoggingFilter;
+import org.glassfish.jersey.logging.LoggingFeatureAutoDiscoverable;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
@@ -147,20 +149,10 @@ public class SessionStorage {
             rootTarget.register(new SessionOutputFilter(sessionId));
         }
         if (configuration.getLogHttp()) {
-            rootTarget.register(initLoggingFilter());
+            rootTarget.register(new LoggingFeatureAutoDiscoverable());
         }
         return rootTarget;
     }
-
-    private LoggingFilter initLoggingFilter() {
-        Logger logger = Logger.getLogger(this.getClass().getName());
-        SLF4JBridgeHandler.removeHandlersForRootLogger();
-        SLF4JBridgeHandler.install();
-
-        return new LoggingFilter(logger,
-                configuration.getLogHttpEntity());
-    }
-
 
     public RestClientConfiguration getConfiguration() {
         return configuration;
